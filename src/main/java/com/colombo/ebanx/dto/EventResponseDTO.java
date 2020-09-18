@@ -11,6 +11,14 @@ public class EventResponseDTO {
     private Account origin;
     private Account destination;
 
+    public EventResponseDTO() {
+    }
+
+    public EventResponseDTO(final Account origin, final Account destination) {
+        this.origin = origin;
+        this.destination = destination;
+    }
+
     public Account getOrigin() {
         return origin;
     }

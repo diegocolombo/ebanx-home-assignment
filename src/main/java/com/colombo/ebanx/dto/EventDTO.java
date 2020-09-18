@@ -8,6 +8,10 @@ import java.math.BigDecimal;
  */
 public class EventDTO {
 
+    public static final String DEPOSIT_TYPE = "deposit";
+    public static final String WITHDRAW_TYPE = "withdraw";
+    public static final String TRANSFER_TYPE = "transfer";
+
     private String type;
     private String origin;
     private String destination;

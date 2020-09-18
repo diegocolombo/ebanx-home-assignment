@@ -28,7 +28,7 @@ public class AccountDAO {
         ACCOUNTS.put(account.getId(), account);
     }
 
-    public Optional<Account> get(final String id) {
+    public Optional<Account> findById(final String id) {
         return Optional.ofNullable(ACCOUNTS.get(id));
     }
 
