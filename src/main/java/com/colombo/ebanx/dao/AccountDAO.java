@@ -22,6 +22,10 @@ public class AccountDAO {
 
     public void reset() {
         ACCOUNTS.clear();
+        final Account account100 = new Account("100");
+        final Account account300 = new Account("300");
+        save(account100);
+        save(account300);
     }
 
     public void save(final Account account) {

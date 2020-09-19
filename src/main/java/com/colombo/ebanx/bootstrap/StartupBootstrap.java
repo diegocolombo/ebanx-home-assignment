@@ -30,9 +30,6 @@ public class StartupBootstrap implements ApplicationListener<ContextRefreshedEve
      * Creates the test accounts
      */
     private void createAccounts() {
-        final Account account100 = new Account("100");
-        final Account account300 = new Account("300");
-        accountDAO.save(account100);
-        accountDAO.save(account300);
+        accountDAO.reset();
     }
 }

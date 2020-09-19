@@ -10,7 +10,6 @@ import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * @author Diego Colombo <diego.colombo@wssim.com.br>
@@ -45,11 +44,25 @@ public class AccountService {
     }
 
     private Optional<EventResponseDTO> executeDeposit(final EventDTO eventDTO) {
-        return executeDestinationAction(eventDTO.getDestination(), account -> account.deposit(eventDTO.getAmount()));
+        return dao.findById(eventDTO.getDestination())
+                .map(account -> {
+                    account.deposit(eventDTO.getAmount());
+                    dao.save(account);
+                    final EventResponseDTO eventResponseDTO = new EventResponseDTO();
+                    eventResponseDTO.setDestination(account);
+                    return eventResponseDTO;
+                });
     }
 
     private Optional<EventResponseDTO> executeWithdraw(final EventDTO eventDTO) {
-        return executeDestinationAction(eventDTO.getDestination(), account -> account.withdraw(eventDTO.getAmount()));
+        return dao.findById(eventDTO.getOrigin())
+                .map(account -> {
+                    account.withdraw(eventDTO.getAmount());
+                    dao.save(account);
+                    final EventResponseDTO eventResponseDTO = new EventResponseDTO();
+                    eventResponseDTO.setOrigin(account);
+                    return eventResponseDTO;
+                });
     }
 
     private Optional<EventResponseDTO> executeTransfer(final EventDTO eventDTO) {
@@ -68,18 +81,6 @@ public class AccountService {
         dao.save(destinationAccount);
 
         return Optional.of(new EventResponseDTO(originAccount, destinationAccount));
-    }
-
-    private Optional<EventResponseDTO> executeDestinationAction(final String destination,
-                                                                final Consumer<Account> consumer) {
-        return dao.findById(destination)
-                .map(account -> {
-                    consumer.accept(account);
-                    dao.save(account);
-                    final EventResponseDTO eventResponseDTO = new EventResponseDTO();
-                    eventResponseDTO.setDestination(account);
-                    return eventResponseDTO;
-                });
     }
 
 }

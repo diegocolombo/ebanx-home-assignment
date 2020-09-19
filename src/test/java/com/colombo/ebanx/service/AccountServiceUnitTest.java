@@ -64,11 +64,11 @@ public class AccountServiceUnitTest {
 
         when(dao.findById(DESTINATION_ID)).thenReturn(Optional.of(account));
 
-        final EventDTO eventDTO = generateEventDTO(null, DESTINATION_ID, EventDTO.WITHDRAW_TYPE);
+        final EventDTO eventDTO = generateEventDTO(DESTINATION_ID, null, EventDTO.WITHDRAW_TYPE);
         final Optional<EventResponseDTO> optEventResponseDTO = service.executeEvent(eventDTO);
 
         isTrue(optEventResponseDTO.isPresent(), "should be present");
-        isTrue(optEventResponseDTO.get().getDestination().equals(account), "destination account should be equals the dao returned object");
+        isTrue(optEventResponseDTO.get().getOrigin().equals(account), "destination account should be equals the dao returned object");
         isTrue(account.getBalance().equals(BigDecimal.valueOf(9)), "expected to be 9 but returned " + account.getBalance());
         verify(dao, Mockito.times(1)).save(account);
     }
